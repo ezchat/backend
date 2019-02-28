@@ -1,3 +1,7 @@
+# Configuration
+config.json
+database
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
