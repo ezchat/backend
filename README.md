@@ -1,6 +1,6 @@
 # ez.chat backend
 
-The backend for ez.chat, built with Flask (to port to CherryPy in future)
+The backend for ez.chat, built with either Flask or CherryPy
 
 ## Setup
 
