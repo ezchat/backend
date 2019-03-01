@@ -11,18 +11,13 @@ if path.exists('config.json'):
 # Connect to MongoDB.
 client = MongoClient(mongo_url)
 cherrypy.log('Connected to MongoDB!')
+db = client.ezchat
 
 
 class Root:
     @cherrypy.expose
     def index(self):
-        return '<head><title>test</title></head><body><p>Hello, world!</p><p>\
-            WIP</p></body>'
-
-    @cherrypy.expose
-    def messages(self):
-        # Just testing stuff..
-        return str(client.ezchat.messages.find({}).count)
+        return open('homepage/index.html', 'r').read()
 
 
 if __name__ == '__main__':

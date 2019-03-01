@@ -1,6 +1,6 @@
 # ez.chat backend
 
-The backend for ez.chat, built with either Flask or CherryPy
+The backend for ez.chat, built with CherryPy.
 
 ## Setup
 
@@ -14,6 +14,6 @@ To setup a virtual environment, run `python3 -m virtualenv venv` (if using `venv
 
 Once done, run `\venv\Scripts\activate` in the command line to activate the virtual environment on Windows, or `source venv/bin/activate` on Linux. This will replace your `python` and `pip` executables for the current terminal with PATH and allow you to use these executables directly. When finished working, type `deactivate` on either platform to deactivate the environment (or close the terminal).
 
-To install the necessary packages (CherryPy, Flake8, Pylint and Flask), run `pip install -r requirements.txt` and to save dependencies after installing a package, run `pip freeze > requirements.txt`.
+To install the necessary packages (CherryPy, Flake8 and pylint), run `pip install -r requirements.txt` and to save dependencies after installing a package, run `pip freeze > requirements.txt`.
 
-VSCode will automatically detect the virtual environment and use packages inside the venv when using the Python extension. PyCharm may or may not do the same.
+VSCode and PyCharm will automatically detect the virtual environment and use packages inside the venv (requires the Python extension on VSCode). Both support debugging on this project as well. VSCode is further configured to properly lint code with Flake8 and pylint (PyCharm uses built-in linters).
