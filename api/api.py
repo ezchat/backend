@@ -25,5 +25,5 @@ class Api:
         return 'Under progress..'
 
     @cherrypy.expose
-    def channels(self, channel_id):
+    def channels(self):
         return 'WIP'

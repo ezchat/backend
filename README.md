@@ -1,5 +1,7 @@
 # ez.chat backend
 
+[![Requirements](http://img.shields.io/badge/requires-CPython%203.5+/PyPy3.5+-blue.svg?style=popout&logo=python)](https://python.org/download)
+
 The backend for ez.chat, built with CherryPy.
 
 ## Setup
