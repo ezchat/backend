@@ -13,10 +13,13 @@ if __name__ == '__main__':
         'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
         'tools.sessions.on': True,
         'tools.response_headers.on': True,
-        'tools.response_headers.headers': [('Content-Type', 'text/plain')],
+        'tools.response_headers.headers': [
+            ('Content-Type', 'application/json')
+        ]
     }
     cherrypy.tree.mount(Api(), '/api', {
-        '/channel': REST_conf
+        '/channel': REST_conf,
+        '/users': REST_conf
     })
     cherrypy.quickstart(Root(), '/', {
         '/favicon.ico': {'tools.staticfile.on': False}
