@@ -1,35 +1,35 @@
 import cherrypy
-from base64 import b64encode
 from hashlib import sha256
+from base64 import b64encode
 from os import urandom
 from time import time_ns
 from pymongo.database import Database
 
+from api.snowflake import Snowflake
+from api.auth import Authenticate
+
 
 @cherrypy.expose
-class Authenticate:
-    def __init__(self, db: Database):
+class Register:
+    def __init__(self, db: Database, auth: Authenticate, snowflake: Snowflake):
+        self.auth = auth
         self.users = db.users
-        self.tokens = {}
+        self.snowflake = snowflake
 
     @cherrypy.tools.json_out()
     def POST(self):
-        # We expect a Username and a Password header.
+        # We expect a Username, Email and a Password header.
         headers: dict = cherrypy.request.headers
         hashed_password = sha256(headers['Password'].encode()).hexdigest()
 
-        # Check for a user with these credentials.
-        user = self.users.find_one({
+        # Create a user with a fresh Snowflake and credentials.
+        res = self.users.insert_one({
+            'username': headers['Username'],
             'password': hashed_password,
-            '$or': [
-                {'username': headers['Username']},
-                {'email': headers['Username']}
-            ]
+            'email': headers['Email'],
+            'id': self.snowflake.generate_snowflake()
         })
-
-        # If it's not there, we go for code 401.
-        if user is None:
-            raise cherrypy.HTTPError(401, 'Unauthorized')
+        user = self.users.find_one({'_id': res.inserted_id})
 
         # Else we generate a token and send.
         id = str(user['id']).encode()  # Encoded ID
@@ -37,5 +37,5 @@ class Authenticate:
         token = f'{b64encode(id).decode()}.{epoch}.{urandom(16).hex()}'
 
         # Store associated token.
-        self.tokens[id.decode()] = token
+        self.auth.tokens[id.decode()] = token
         return {'token': token}
