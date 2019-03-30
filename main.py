@@ -7,6 +7,10 @@ class Root:
     def index(self):
         return open('homepage/index.html', 'r').read()
 
+    @cherrypy.expose
+    def playground(self):
+        return open('homepage/playground.html', 'r').read()
+
 
 if __name__ == '__main__':
     REST_conf = {

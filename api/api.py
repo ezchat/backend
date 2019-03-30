@@ -23,6 +23,7 @@ authenticate = Authenticate(db)
 snowflake = Snowflake()
 
 
+# We use this to provide /users/auth and /users/register
 @cherrypy.expose
 class UserApi:
     def __init__(self):
@@ -32,6 +33,7 @@ class UserApi:
 
 class Api:
     def __init__(self):
+        # API endpoints which use REST.
         self.channel = Channel(db)
         self.users = UserApi()
 
