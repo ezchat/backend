@@ -18,4 +18,4 @@ Once done, run `\venv\Scripts\activate` in the command line to activate the virt
 
 To install the necessary packages (CherryPy, Flake8 and pylint), run `pip install -r requirements.txt` and to save dependencies after installing a package, run `pip freeze > requirements.txt`.
 
-VSCode and PyCharm will automatically detect the virtual environment and use packages inside the venv (requires the Python extension on VSCode). Both support debugging on this project as well. VSCode is further configured to properly lint code with Flake8 and pylint (PyCharm uses built-in linters).
+VSCode and PyCharm will automatically detect the virtual environment and use packages inside the venv (requires the Python extension on VSCode). Both support debugging on this project as well. VSCode is further configured to properly lint code with Flake8 and pylint (PyCharm uses built-in linters). On Windows and VSCode, you may need to change the Flake8 path in .vscode/settings.json.

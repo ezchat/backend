@@ -8,9 +8,9 @@ from pymongo.database import Database
 
 @cherrypy.expose
 class Authenticate:
-    def __init__(self, db: Database):
+    def __init__(self, db: Database, tokens):
         self.users = db.users
-        self.tokens = {}
+        self.tokens = tokens
 
     @cherrypy.tools.json_out()
     def POST(self):

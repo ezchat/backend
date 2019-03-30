@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from api.channel import Channel
 from api.auth import Authenticate
 from api.register import Register
-from api.snowflake import Snowflake
+from api.helpers import Snowflake
 
 # Read configuration.
 mongo_url = 'mongodb://localhost:27017'
@@ -18,17 +18,16 @@ client = MongoClient(mongo_url)
 cherrypy.log('Connected to MongoDB!')
 db = client.ezchat
 
-# Create a class for authenticating and another for Snowflakes.
-authenticate = Authenticate(db)
+# Create a dictionary for tokens a class for generating Snowflakes.
 snowflake = Snowflake()
+tokens = {}
 
-
-# We use this to provide /users/auth and /users/register
+# We use this to provide /users/auth and /users/register.
 @cherrypy.expose
 class UserApi:
     def __init__(self):
-        self.auth = authenticate
-        self.register = Register(db, authenticate, snowflake)
+        self.auth = Authenticate(db, tokens)
+        self.register = Register(db, tokens, snowflake)
 
 
 class Api:
