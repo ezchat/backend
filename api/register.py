@@ -8,6 +8,7 @@ from pymongo.database import Database
 from api.helpers import Snowflake
 
 
+# This class is used for registering a user.
 @cherrypy.expose
 class Register:
     def __init__(self, db: Database, tokens, snowflake: Snowflake):

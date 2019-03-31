@@ -30,6 +30,8 @@ class UserApi:
         self.register = Register(db, tokens, snowflake)
 
 
+# This class provides our API endpoints.
+# Each endpoint is represented by a property or method on a class.
 class Api:
     def __init__(self):
         # API endpoints which use REST.

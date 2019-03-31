@@ -1,6 +1,8 @@
 from time import time as time_ms
 
 
+# This class is used by us to generate "Snowflakes"
+# These aren't technically Twitter/Discord Snowflakes, since they're 40 bit.
 class Snowflake:
     def __init__(self):
         self.last_epoch = 0
