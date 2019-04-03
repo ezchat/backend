@@ -2,6 +2,10 @@
 config.json
 database
 
+# To allow Windows users to contribute.. :(
+# Set flake8 path in settings.json to venv\Scripts\flake8 on Windows
+.vscode/settings.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

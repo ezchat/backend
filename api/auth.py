@@ -6,11 +6,12 @@ from time import time_ns
 from pymongo.database import Database
 
 
+# This class is used for authorizing users with tokens.
 @cherrypy.expose
 class Authenticate:
-    def __init__(self, db: Database):
+    def __init__(self, db: Database, tokens):
         self.users = db.users
-        self.tokens = {}
+        self.tokens = tokens
 
     @cherrypy.tools.json_out()
     def POST(self):

@@ -5,14 +5,14 @@ from os import urandom
 from time import time_ns
 from pymongo.database import Database
 
-from api.snowflake import Snowflake
-from api.auth import Authenticate
+from api.helpers import Snowflake
 
 
+# This class is used for registering a user.
 @cherrypy.expose
 class Register:
-    def __init__(self, db: Database, auth: Authenticate, snowflake: Snowflake):
-        self.auth = auth
+    def __init__(self, db: Database, tokens, snowflake: Snowflake):
+        self.tokens = tokens
         self.users = db.users
         self.snowflake = snowflake
 
@@ -37,5 +37,5 @@ class Register:
         token = f'{b64encode(id).decode()}.{epoch}.{urandom(16).hex()}'
 
         # Store associated token.
-        self.auth.tokens[id.decode()] = token
+        self.tokens[id.decode()] = token
         return {'token': token}
