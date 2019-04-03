@@ -3,6 +3,7 @@ from json import load
 from os import path
 from pymongo import MongoClient
 
+from api.guild import Guild
 from api.channel import Channel
 from api.auth import Authenticate
 from api.register import Register
@@ -36,6 +37,7 @@ class Api:
         # API endpoints which use REST.
         self.channel = Channel(db)
         self.users = UserApi()
+        self.guild = Guild()
 
     @cherrypy.expose
     def index(self):

@@ -10,4 +10,4 @@ class Channel:
     @cherrypy.tools.json_out()
     @cherrypy.popargs('channel_id')
     def GET(self, channel_id):
-        return self.channels.find_one({channel_id: channel_id})
+        return self.channels.find_one({'id': channel_id})
