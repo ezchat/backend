@@ -37,7 +37,7 @@ class Api:
         # API endpoints which use REST.
         self.channel = Channel(db)
         self.users = UserApi()
-        self.guild = Guild()
+        self.guild = Guild(db)
 
     @cherrypy.expose
     def index(self):
