@@ -29,6 +29,7 @@ if __name__ == '__main__':
     cherrypy.tree.mount(Api(), '/api', {
         '/guild': REST_conf,
         '/channel': REST_conf,
+        '/DMs': REST_conf,
         '/users': REST_conf
     })
     cherrypy.quickstart(Root(), '/', {
