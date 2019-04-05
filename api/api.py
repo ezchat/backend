@@ -5,7 +5,7 @@ from pymongo import MongoClient
 
 from api.guild import Guild
 from api.channel import Channel
-from api.DM import DM
+from api.dm import DirectMessages
 from api.auth import Authenticate
 from api.register import Register
 from api.helpers import Snowflake
@@ -40,7 +40,7 @@ class Api:
         self.channel = Channel(db)
         self.users = UserApi()
         self.guild = Guild(db)
-        self.DM = DM(db)
+        self.dm = DirectMessages(db)
 
     @cherrypy.expose
     def index(self):
