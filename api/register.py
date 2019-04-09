@@ -5,11 +5,12 @@ from os import urandom
 from time import time_ns
 from pymongo.database import Database
 
-from api.helpers import Snowflake
+from api.helpers import Snowflake, cors
 
 
 # This class is used for registering a user.
 @cherrypy.expose
+@cors.preflight()
 class Register:
     def __init__(self, db: Database, tokens, snowflake: Snowflake):
         self.tokens = tokens

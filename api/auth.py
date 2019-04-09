@@ -5,13 +5,18 @@ from os import urandom
 from time import time_ns
 from pymongo.database import Database
 
+from api.helpers import cors
+
 
 # This class is used for authorizing users with tokens.
 @cherrypy.expose
+@cors.preflight()
 class Authenticate:
     def __init__(self, db: Database, tokens):
         self.users = db.users
         self.tokens = tokens
+
+    def OPTIONS(self): pass
 
     @cherrypy.tools.json_out()
     def POST(self):
