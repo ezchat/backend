@@ -9,7 +9,7 @@ class Base:
         res = cherrypy.serving.response
         allowed_methods = 'GET, POST, PATCH, PUT, DELETE, HEAD, OPTIONS'
         allowed_headers = 'Origin, X-Requested-With, Content-Type,\
-        Accept, Username, Password, Token'
+        Accept, Username, Password, Token, Email'
         # Setup response.
         res.headers['Access-Control-Allow-Origin'] = req.headers['Origin']
         res.headers['Access-Control-Allow-Methods'] = allowed_methods

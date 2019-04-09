@@ -12,8 +12,7 @@ from api.base import Base
 # This class is used for registering a user.
 @cherrypy.expose
 class Register(Base):
-    def __init__(self, db: Database, tokens, snowflake: Snowflake):
-        self.tokens = tokens
+    def __init__(self, db: Database, snowflake: Snowflake):
         self.users = db.users
         self.snowflake = snowflake
 
@@ -32,11 +31,9 @@ class Register(Base):
         })
         user = self.users.find_one({'_id': res.inserted_id})
 
-        # Else we generate a token and send.
+        # We generate a token, store it and send it.
         id = str(user['id']).encode()  # Encoded ID
         epoch = b64encode(str(time_ns()).encode()).decode()  # Epoch Base64
         token = f'{b64encode(id).decode()}.{epoch}.{urandom(16).hex()}'
-
-        # Store associated token.
-        self.tokens[id.decode()] = token
+        self.users.update_one(user, {'$set': {'token': token}})
         return {'token': token}

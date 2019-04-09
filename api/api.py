@@ -20,16 +20,15 @@ client = MongoClient(mongo_url)
 cherrypy.log('Connected to MongoDB!')
 db = client.ezchat
 
-# Create a dictionary for tokens a class for generating Snowflakes.
+# Create a class for generating Snowflakes.
 snowflake = Snowflake()
-tokens = {}
 
 # We use this to provide /users/auth and /users/register.
 @cherrypy.expose
 class UserApi:
     def __init__(self):
-        self.auth = Authenticate(db, tokens)
-        self.register = Register(db, tokens, snowflake)
+        self.auth = Authenticate(db)
+        self.register = Register(db, snowflake)
 
 
 # This class provides our API endpoints.

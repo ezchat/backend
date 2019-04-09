@@ -11,9 +11,8 @@ from api.base import Base
 # This class is used for authorizing users with tokens.
 @cherrypy.expose
 class Authenticate(Base):
-    def __init__(self, db: Database, tokens):
+    def __init__(self, db: Database):
         self.users = db.users
-        self.tokens = tokens
 
     @cherrypy.tools.json_out()
     def POST(self):
@@ -22,7 +21,7 @@ class Authenticate(Base):
         hashed_password = sha256(headers['Password'].encode()).hexdigest()
 
         # Check for a user with these credentials.
-        user = self.users.find_one({
+        user: dict = self.users.find_one({
             'password': hashed_password,
             '$or': [
                 {'username': headers['Username']},
@@ -34,11 +33,14 @@ class Authenticate(Base):
         if user is None:
             raise cherrypy.HTTPError(401, 'Unauthorized')
 
+        # If the user has a stored token, then we send it.
+        if 'token' in user and user['token'] != '':
+            return {'token': user['token']}
         # Else we generate a token and send.
-        id = str(user['id']).encode()  # Encoded ID
-        epoch = b64encode(str(time_ns()).encode()).decode()  # Epoch Base64
-        token = f'{b64encode(id).decode()}.{epoch}.{urandom(16).hex()}'
-
-        # Store associated token.
-        self.tokens[id.decode()] = token
-        return {'token': token}
+        else:
+            id = str(user['id']).encode()  # Encoded ID
+            epoch = b64encode(str(time_ns()).encode()).decode()  # Epoch Base64
+            token = f'{b64encode(id).decode()}.{epoch}.{urandom(16).hex()}'
+            # Store the token and send it.
+            self.users.update_one(user, {'$set': {'token': token}})
+            return {'token': token}
