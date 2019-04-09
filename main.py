@@ -25,14 +25,13 @@ if __name__ == '__main__':
         'tools.response_headers.headers': [
             ('Content-Type', 'application/json')
         ],
-        'cors.expose.on': True,
-        'cors.preflight.on': True
+        'cors.expose_public.on': True
     }
     # We mount the main page separately from the API.
     app = cherrypy.tree.mount(Api(), '/api', {
         '/guild': REST_conf,
         '/channel': REST_conf,
-        '/DMs': REST_conf,
+        '/dm': REST_conf,
         '/users': REST_conf
     })
     app.toolboxes['cors'] = cors

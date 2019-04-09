@@ -1,9 +1,11 @@
 import cherrypy
 from pymongo.database import Database
 
+from api.base import Base
+
 
 @cherrypy.expose
-class DirectMessages:
+class DirectMessages(Base):
     def __init__(self, db: Database):
         self.direct_messages = db.direct_messages
 

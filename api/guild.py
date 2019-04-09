@@ -1,9 +1,11 @@
 import cherrypy
 from pymongo.database import Database
 
+from api.base import Base
+
 
 @cherrypy.expose
-class Guild:
+class Guild(Base):
     def __init__(self, db: Database):
         self.guilds = db.guilds
 

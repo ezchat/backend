@@ -1,10 +1,12 @@
 import cherrypy
 from pymongo.database import Database
 
+from api.base import Base
+
 
 # This class *will* be used for getting/creating/editing channels.
 @cherrypy.expose
-class Channel:
+class Channel(Base):
     def __init__(self, db: Database):
         self.channels = db.channels
 
