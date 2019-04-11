@@ -32,11 +32,15 @@ class UserApi:
 class Api:
     def __init__(self):
         # API endpoints which use REST.
-        self.channels = Channel(db)
+        self.channel = Channel(db)
         self.users = UserApi()
-        self.guilds = Guild(db)
-        self.dms = DirectMessages(db)
+        self.guild = Guild(db)
+        self.dm = DirectMessages(db)
 
     @cherrypy.expose
     def index(self):
         return 'Under progress..'
+
+    @cherrypy.expose
+    def channels(self):
+        return 'WIP'

@@ -2,6 +2,10 @@ import cherrypy
 from api import Api
 from api.helpers import cors
 
+# ;)
+# import antigravity  # noqa: F401
+# ok I'm sorry
+
 
 # This responds to our requests for the homepage, playground, etc.
 class Root:

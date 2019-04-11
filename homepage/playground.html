@@ -33,7 +33,10 @@
             async request () {
                 try {
                     const request = await fetch(`/api${this.state.endpoint}`, {
-                        headers: JSON.parse(this.state.headers),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...JSON.parse(this.state.headers)
+                        },
                         body: this.state.body || undefined,
                         method: this.state.method
                     })

@@ -18,8 +18,8 @@ class Guild(Base):
     def GET(self, guild_id):
         return self.guilds.find_one({'id': guild_id})
 
-    @cherrypy.tools.json_out()
     @cherrypy.tools.json_in()
+    @cherrypy.tools.json_out()
     def POST(self):
         # Read the token.
         token = cherrypy.request.headers['Token']
@@ -38,8 +38,8 @@ class Guild(Base):
             'name': data['name'],
             'emojis': [],
             'features': [],
-            'icon': data['icon'] or '',
-            'owner_id': user.id,
+            'icon': data['icon'] if data.__contains__('icon') else '',
+            'owner_id': user['id'],
             'channels': [],
             'members': [
                 {
@@ -49,10 +49,14 @@ class Guild(Base):
                     'joined_at': datetime.utcnow().isoformat()
                 }
             ],
-            'default_message_notifications': data['default_\
-message_notifications'] or 0,
+            'default_message_notifications': data[
+                'default_message_notifications'
+            ] if data.__contains__(
+                'default_message_notifications'
+            ) else 0,
             'roles': []
         })
         # Fetch the guild.
-        guild = self.users.find_one({'_id': created_guild.inserted_id})
-        return guild
+        guild = self.guilds.find_one({'_id': created_guild.inserted_id})
+        guild['_id'] = ''
+        return str(guild)
