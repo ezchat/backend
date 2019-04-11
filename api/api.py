@@ -8,7 +8,6 @@ from api.channel import Channel
 from api.dm import DirectMessages
 from api.auth import Authenticate
 from api.register import Register
-from api.helpers import Snowflake
 
 # Read configuration.
 mongo_url = 'mongodb://localhost:27017'
@@ -20,15 +19,12 @@ client = MongoClient(mongo_url)
 cherrypy.log('Connected to MongoDB!')
 db = client.ezchat
 
-# Create a class for generating Snowflakes.
-snowflake = Snowflake()
-
 # We use this to provide /users/auth and /users/register.
 @cherrypy.expose
 class UserApi:
     def __init__(self):
         self.auth = Authenticate(db)
-        self.register = Register(db, snowflake)
+        self.register = Register(db)
 
 
 # This class provides our API endpoints.
@@ -36,15 +32,11 @@ class UserApi:
 class Api:
     def __init__(self):
         # API endpoints which use REST.
-        self.channel = Channel(db)
+        self.channels = Channel(db)
         self.users = UserApi()
-        self.guild = Guild(db)
-        self.dm = DirectMessages(db)
+        self.guilds = Guild(db)
+        self.dms = DirectMessages(db)
 
     @cherrypy.expose
     def index(self):
         return 'Under progress..'
-
-    @cherrypy.expose
-    def channels(self):
-        return 'WIP'

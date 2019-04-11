@@ -12,9 +12,9 @@ from api.base import Base
 # This class is used for registering a user.
 @cherrypy.expose
 class Register(Base):
-    def __init__(self, db: Database, snowflake: Snowflake):
+    def __init__(self, db: Database):
         self.users = db.users
-        self.snowflake = snowflake
+        self.snowflake = Snowflake()
 
     @cherrypy.tools.json_out()
     def POST(self):
@@ -27,7 +27,8 @@ class Register(Base):
             'username': headers['Username'],
             'password': hashed_password,
             'email': headers['Email'],
-            'id': self.snowflake.generate_snowflake()
+            'id': self.snowflake.generate_snowflake(),
+            'guilds': []
         })
         user = self.users.find_one({'_id': res.inserted_id})
 
