@@ -145,6 +145,7 @@ def install():
 
 class CORS(object):
     """A generic CORS handler."""
+
     def __init__(self, req_headers, resp_headers):
         self.req_headers = req_headers
         self.resp_headers = resp_headers

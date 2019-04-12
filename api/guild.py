@@ -1,6 +1,7 @@
 import cherrypy
 from datetime import datetime
 from pymongo.database import Database
+from pymongo import ReturnDocument
 
 from api.base import Base
 from api.helpers import Snowflake
@@ -16,7 +17,24 @@ class Guild(Base):
     @cherrypy.tools.json_out()
     @cherrypy.popargs('guild_id')
     def GET(self, guild_id):
-        return self.guilds.find_one({'id': guild_id})
+        # Read the token.
+        token = cherrypy.request.headers['Token']
+        # Validate the token.
+        user: dict = self.users.find_one({'token': token})
+        if user is None:
+            raise cherrypy.HTTPError(401, 'Unauthorized')
+        # Check if user is in the server.
+        elif not user.__contains__(
+            'guilds'
+        ) or not user['guilds'].__contains__(guild_id):
+            raise cherrypy.HTTPError(403, 'You cannot access this guild!')
+        # Check if the guild exists.
+        guild = self.guilds.find_one({'id': guild_id})
+        if guild is None:
+            raise cherrypy.HTTPError(410, 'Guild was deleted!')
+        # Send the guild.
+        guild.pop('_id')
+        return guild
 
     @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
@@ -28,7 +46,7 @@ class Guild(Base):
         if user is None:
             raise cherrypy.HTTPError(401, 'Unauthorized')
         # If user has over 100 guilds, we do not allow guild creation.
-        if user.__contains__('guilds') and len(user['guilds']) >= 100:
+        elif user.__contains__('guilds') and len(user['guilds']) >= 100:
             raise cherrypy.HTTPError(403, 'User in too many guilds!')
         # Reference to parsed request body.
         data: dict = cherrypy.request.json
@@ -43,7 +61,8 @@ class Guild(Base):
             'channels': [],
             'members': [
                 {
-                    'user': user,
+                    'id': user['id'],
+                    'username': user['username'],
                     'roles': [],
                     'nickname': '',
                     'joined_at': datetime.utcnow().isoformat()
@@ -57,6 +76,91 @@ class Guild(Base):
             'roles': []
         })
         # Fetch the guild.
-        guild = self.guilds.find_one({'_id': created_guild.inserted_id})
-        guild['_id'] = ''
-        return str(guild)
+        guild: dict = self.guilds.find_one({'_id': created_guild.inserted_id})
+        guild.pop('_id')
+        # Join the user to the guild.
+        self.users.update_one(
+            {'_id': user['_id']},
+            {'$push': {'guilds': guild['id']}}
+        )
+        return guild
+
+    @cherrypy.tools.json_out()
+    @cherrypy.popargs('guild_id')
+    def DELETE(self, guild_id):
+        # Read the token.
+        token = cherrypy.request.headers['Token']
+        # Validate the token.
+        user: dict = self.users.find_one({'token': token})
+        if user is None:
+            raise cherrypy.HTTPError(401, 'Unauthorized')
+        # Check if user is in the server.
+        elif not user.__contains__(
+            'guilds'
+        ) or not user['guilds'].__contains__(guild_id):
+            raise cherrypy.HTTPError(403, 'You cannot access this guild!')
+        # Check if the guild exists.
+        guild = self.guilds.find_one_and_delete({'id': guild_id})
+        if guild is None:
+            raise cherrypy.HTTPError(410, 'Guild was deleted!')
+        # Check if user can delete the server.
+        elif guild['owner_id'] != user['id']:
+            raise cherrypy.HTTPError(403, 'You cannot delete this guild!')
+        # Send the guild.
+        guild.pop('_id')
+        return guild
+
+    @cherrypy.tools.json_in()
+    @cherrypy.tools.json_out()
+    @cherrypy.popargs('guild_id')
+    def PATCH(self, guild_id):
+        # Read the token.
+        token = cherrypy.request.headers['Token']
+        # Validate the token.
+        user: dict = self.users.find_one({'token': token})
+        if user is None:
+            raise cherrypy.HTTPError(401, 'Unauthorized')
+        # Check if user is in the server.
+        elif not user.__contains__(
+            'guilds'
+        ) or not user['guilds'].__contains__(guild_id):
+            raise cherrypy.HTTPError(403, 'You cannot access this guild!')
+        # Check if the guild exists.
+        guild = self.guilds.find_one({'id': guild_id})
+        if guild is None:
+            raise cherrypy.HTTPError(410, 'Guild was deleted!')
+        # Check if user can modify the server, currently based on ownership.
+        elif guild['owner_id'] != user['id']:
+            raise cherrypy.HTTPError(403, 'You cannot modify this guild!')
+        # Reference to parsed request body.
+        data: dict = cherrypy.request.json
+        # Create the guild.
+        updated_guild = self.guilds.find_one_and_update(
+            {'id': guild_id},
+            {
+                '$set': {
+                    # Name.
+                    'name': data['name'] if data.__contains__(
+                        'name'
+                    ) else guild['name'],
+                    # Icon.
+                    'icon': data['icon'] if data.__contains__(
+                        'icon'
+                    ) else guild['icon'],
+                    # Owner ID.
+                    'owner_id': data['owner_id'] if data.__contains__(
+                        'owner_id'
+                    ) else guild['owner_id'],
+                    # Default user message notifications.
+                    'default_message_notifications': data[
+                        'default_message_notifications'
+                    ] if data.__contains__(
+                        'default_message_notifications'
+                    ) else guild['default_message_notifications']
+                }
+            },
+            return_document=ReturnDocument.AFTER
+        )
+        # Return updated guild.
+        updated_guild.pop('_id')
+        return updated_guild
