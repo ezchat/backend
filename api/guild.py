@@ -106,6 +106,12 @@ class Guild(Base):
         # Check if user can delete the server.
         elif guild['owner_id'] != user['id']:
             raise cherrypy.HTTPError(403, 'You cannot delete this guild!')
+        # Kick its members.
+        for member in guild['members']:
+            self.users.update_one(
+                {'id': member['id']},
+                {'$pull': {'guilds': guild['id']}}
+            )
         # Send the guild.
         guild.pop('_id')
         return guild

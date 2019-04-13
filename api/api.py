@@ -6,8 +6,7 @@ from pymongo import MongoClient
 from api.guild import Guild
 from api.channel import Channel
 from api.dm import DirectMessages
-from api.auth import Authenticate
-from api.register import Register
+from api.users import Authenticate, UserMe, Register
 
 # Read configuration.
 mongo_url = 'mongodb://localhost:27017'
@@ -25,6 +24,7 @@ class UserApi:
     def __init__(self):
         self.auth = Authenticate(db)
         self.register = Register(db)
+        self.me = UserMe(db)
 
 
 # This class provides our API endpoints.
