@@ -25,10 +25,10 @@ class DirectMessages(Base):
         # Check if user is in the server.
         elif not user.__contains__(
             'direct_messages'
-        ) or not user['direct_messages'].__contains__(guild_id):
+        ) or not user['direct_messages'].__contains__(dm_id):
             raise cherrypy.HTTPError(403, 'You cannot access this guild!')
         # Check if the DM exists.
-        direct_message = self.direct_messages.find_one({'id': guild_id})
+        direct_message = self.direct_messages.find_one({'id': dm_id})
         if direct_message is None:
             raise cherrypy.HTTPError(410, 'DM channel was deleted!')
         # Send the DM.
