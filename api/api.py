@@ -3,7 +3,7 @@ from json import load
 from os import path
 from pymongo import MongoClient
 
-from api.guild import Guild
+# from api.guild import Guild
 from api.channel import Channel
 from api.dm import DirectMessages
 from api.users import Authenticate, UserMe, Register
@@ -18,7 +18,7 @@ client = MongoClient(mongo_url)
 cherrypy.log('Connected to MongoDB!')
 db = client.ezchat
 
-# We use this to provide /users/auth and /users/register.
+# We use this to provide /users.
 @cherrypy.expose
 class UserApi:
     def __init__(self):
@@ -34,7 +34,8 @@ class Api:
         # API endpoints which use REST.
         self.channel = Channel(db)
         self.users = UserApi()
-        self.guild = Guild(db)
+        # Undeveloped.
+        # self.guild = Guild(db)
         self.dm = DirectMessages(db)
 
     @cherrypy.expose
