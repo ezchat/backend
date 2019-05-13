@@ -3,6 +3,7 @@ from pymongo.database import Database
 from pymongo import ReturnDocument
 
 from api.base import Base
+from api.users.me import UserMeChannels
 
 
 # This class is used for getting the user.
@@ -10,6 +11,7 @@ from api.base import Base
 class UserMe(Base):
     def __init__(self, db: Database):
         self.users = db.users
+        self.channels = UserMeChannels(db)
 
     @cherrypy.tools.json_out()
     def GET(self):

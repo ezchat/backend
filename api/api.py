@@ -4,7 +4,7 @@ from os import path
 from pymongo import MongoClient
 
 # from api.guild import Guild
-from api.channel import Channel
+# from api.channel import Channel
 from api.dm import DirectMessages
 from api.users import Authenticate, UserMe, Register
 
@@ -32,11 +32,11 @@ class UserApi:
 class Api:
     def __init__(self):
         # API endpoints which use REST.
-        self.channel = Channel(db)
         self.users = UserApi()
-        # Undeveloped.
-        # self.guild = Guild(db)
         self.dm = DirectMessages(db)
+        # Undeveloped.
+        # self.channel = Channel(db)
+        # self.guild = Guild(db)
 
     @cherrypy.expose
     def index(self):

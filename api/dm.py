@@ -26,7 +26,7 @@ class DirectMessages(Base):
         elif not user.__contains__(
             'direct_messages'
         ) or not user['direct_messages'].__contains__(dm_id):
-            raise cherrypy.HTTPError(403, 'You cannot access this guild!')
+            raise cherrypy.HTTPError(403, 'You cannot access this DM channel!')
         # Check if the DM exists.
         direct_message = self.direct_messages.find_one({'id': dm_id})
         if direct_message is None:

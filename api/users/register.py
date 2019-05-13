@@ -28,7 +28,8 @@ class Register(Base):
             'password': hashed_password,
             'email': headers['Email'],
             'id': self.snowflake.generate_snowflake(),
-            'guilds': []
+            'guilds': [],
+            'direct_messages': []
         })
         user = self.users.find_one({'_id': res.inserted_id})
 
