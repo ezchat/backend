@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "target": "es2016",
+    "noImplicitAny": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "outDir": "dist/",
+    "pretty": true,
+    "skipLibCheck": false,
+    "strict": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ]
+}
