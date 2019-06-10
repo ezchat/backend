@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>API Playground - ez.chat</title>
+    <link rel='shortcut icon' href='https://avatars0.githubusercontent.com/u/48025901?s=200&v=4' />
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+        }
+        textarea {
+            width: 99%
+        }
+        #code {
+            background-color: darkgray;
+            width: 99%;
+            padding: 5px;
+            margin-top: 10px;
+        }
+    </style>
+    <script src='https://unpkg.com/react@16/umd/react.development.js' crossorigin></script>
+    <script src='https://unpkg.com/react-dom@16/umd/react-dom.development.js' crossorigin></script>
+    <script src='https://unpkg.com/babel-standalone@6/babel.min.js'></script>
+    <script type='text/babel' data-presets='react'>
+        class App extends React.Component {
+            constructor() {
+                super()
+                this.state = {
+                    endpoint: '', headers: '', body: '', method: 'GET', res: 'Run a request first.'
+                }
+                this.request = this.request.bind(this)
+            }
+            async request () {
+                try {
+                    const request = await fetch(`/api${this.state.endpoint}`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...JSON.parse(this.state.headers)
+                        },
+                        body: this.state.body || undefined,
+                        method: this.state.method
+                    })
+                    const res = await request.text()
+                    this.setState({ res })
+                } catch (e) { this.setState({ res: 'Your request errored out.\n' + e }) }
+            }
+            render () {
+                return (
+                    <React.Fragment>
+                      <h1>API Playground</h1>
+                      {/* Specify the endpoint. */}
+                      Endpoint: <input autoFocus type='text' value={this.state.endpoint} onChange={(e) => this.setState({ endpoint: e.target.value })} /><br />
+                      {/* Specify the headers. */}
+                      <p>Headers (in JSON format):</p>
+                      <textarea rows={10} type='text' value={this.state.headers} onChange={(e) => this.setState({ headers: e.target.value })} />
+                      {/* Specify the body. */}
+                      <p>Body:</p>
+                      <textarea rows={10} type='text' value={this.state.body} onChange={(e) => this.setState({ body: e.target.value })} /><br />
+                      {/* Specify the method. */}
+                      <br />Method: <input type='text' value={this.state.method} onChange={(e) => this.setState({ method: e.target.value })} /><br />
+                      {/* Make the request. */}
+                      <br /><button onClick={this.request}>Test Request</button><br />
+                      {/* An empty line.. */}
+                      <br /><hr /><br />
+                      {/* Display the output. */}
+                      Output:<br /><div id='code'><code>{this.state.res}</code></div>
+                    </React.Fragment>
+                )
+            }
+        }
+        ReactDOM.render(<App />, document.querySelector('#app'))
+    </script>
+</head>
+
+<body>
+    <div id='app'>
+        <h2>This application requires Edge 15+, Firefox 52+, Opera 52+, Chrome 65+ or Vivaldi 2.0+, older browsers may not work.</h2>
+    </div>
+</body>
+
+</html>
