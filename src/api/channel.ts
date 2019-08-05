@@ -10,6 +10,7 @@ export const apiChannelGET = (db: Db): RequestHandler => async (req, res) => {
     return
   }
   // Get the channel.
+  // TODO: Properly get REST parameter.
   const id = req.url.split('/').pop()
   const channel = await db.collection('channels').findOne({ id })
   // Send it.

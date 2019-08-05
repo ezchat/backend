@@ -16,6 +16,8 @@ client.connect().then(() => {
   // Assign API endpoints.
   app.get('/api', api)
   app.get('/api/dm', apiDmGET(db))
+  // Disabled endpoints.
+  // app.get('/api/guild', apiGuildGet(db))
   // app.get('/api/channel', apiChannelGET(db))
 }).catch(console.error.bind('Failed to initialize API!'))
 

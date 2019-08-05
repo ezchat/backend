@@ -10,6 +10,7 @@ export const apiDmGET = (db: Db): RequestHandler => async (req, res) => {
     return
   }
   // Check if the user is in the DMs.
+  // TODO: Properly get REST parameter.
   const id = req.url.split('/').pop()
   if (!user['direct_messages'] || !user['direct_messages'].includes(id)) {
     res.sendStatus(403)
