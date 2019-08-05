@@ -1,7 +1,6 @@
-import { RequestHandler } from 'express'
-import { Db } from 'mongodb'
+import { Endpoint } from '../types'
 
-export const apiChannelGET = (db: Db): RequestHandler => async (req, res) => {
+export const apiChannelGET: Endpoint = (db) => async (req, res) => {
   // Verify if the user exists.
   const token = req.headers['token']
   const user = await db.collection('users').findOne({ token })
@@ -10,8 +9,7 @@ export const apiChannelGET = (db: Db): RequestHandler => async (req, res) => {
     return
   }
   // Get the channel.
-  // TODO: Properly get REST parameter.
-  const id = req.url.split('/').pop()
+  const id = req.params['channel_id']
   const channel = await db.collection('channels').findOne({ id })
   // Send it.
   channel['_id'] = undefined

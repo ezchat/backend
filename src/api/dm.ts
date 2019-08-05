@@ -1,7 +1,6 @@
-import { RequestHandler } from 'express'
-import { Db } from 'mongodb'
+import { Endpoint } from '../types'
 
-export const apiDmGET = (db: Db): RequestHandler => async (req, res) => {
+export const apiDmGET: Endpoint = (db) => async (req, res) => {
   // Verify if the user exists.
   const token = req.headers['token']
   const user = await db.collection('users').findOne({ token })
@@ -10,8 +9,7 @@ export const apiDmGET = (db: Db): RequestHandler => async (req, res) => {
     return
   }
   // Check if the user is in the DMs.
-  // TODO: Properly get REST parameter.
-  const id = req.url.split('/').pop()
+  const id = req.params['dm_id']
   if (!user['direct_messages'] || !user['direct_messages'].includes(id)) {
     res.sendStatus(403)
     return

@@ -2,7 +2,6 @@ import express from 'express'
 import { resolve } from 'path'
 import { MongoClient } from 'mongodb'
 import { api } from './api'
-import { apiDmGET } from './api/dm'
 
 const app = express()
 const port = 3000
@@ -12,13 +11,14 @@ const client = new MongoClient('mongodb://localhost:27017')
 client.connect().then(() => {
   console.log('Connected to MongoDB successfully!')
   // Get database.
-  const db = client.db('ezchat')
+  // const db = client.db('ezchat')
   // Assign API endpoints.
   app.get('/api', api)
-  app.get('/api/dm', apiDmGET(db))
   // Disabled endpoints.
-  // app.get('/api/guild', apiGuildGet(db))
-  // app.get('/api/channel', apiChannelGET(db))
+  // Require a solid database structure to be decided on.
+  // app.get('/api/dm/:dm_id', apiDmGET(db))
+  // app.get('/api/guild/:guild_id', apiGuildGET(db))
+  // app.get('/api/channel/:channel_id', apiChannelGET(db))
 }).catch(console.error.bind('Failed to initialize API!'))
 
 // Primary endpoints.

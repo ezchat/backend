@@ -1,7 +1,6 @@
-import { Db } from 'mongodb'
-import { RequestHandler } from 'express'
+import { Endpoint } from '../types'
 
-export const apiGuildGET = (db: Db): RequestHandler => async (req, res) => {
+export const apiGuildGET: Endpoint = (db) => async (req, res) => {
   // Verify if the user exists.
   const token = req.headers['token']
   const user = await db.collection('users').findOne({ token })
@@ -10,8 +9,7 @@ export const apiGuildGET = (db: Db): RequestHandler => async (req, res) => {
     return
   }
   // Check if the user is in the guild.
-  // TODO: Properly get REST parameter.
-  const id = req.url.split('/').pop()
+  const id = req.params['guild_id']
   if (!user['guilds'] || !user['guilds'].includes(id)) {
     res.sendStatus(403)
     return
