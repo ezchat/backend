@@ -1,19 +1,25 @@
 module.exports = {
   env: {
     es6: true,
-    node: true
+    node: true,
   },
-  extends: ["standard"],
-  plugins: ["@typescript-eslint/eslint-plugin"],
-  parser: "@typescript-eslint/parser",
+  extends: ['standard-with-typescript'],
+  plugins: ['@typescript-eslint'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.json'
+  },
   rules: {
-    // TypeScript styling.
-    "@typescript-eslint/no-explicit-any": ["error"],
-    "@typescript-eslint/type-annotation-spacing": ["error"],
-    "@typescript-eslint/no-namespace": ["error"],
-    "@typescript-eslint/interface-name-prefix": ["error"],
-    "@typescript-eslint/no-angle-bracket-type-assertion": ["error"],
-    // Fix no-unused-vars.
-    "@typescript-eslint/no-unused-vars": ["error"]
+    // React Hooks rules.
+    // 'react-hooks/rules-of-hooks': 'error',
+    // 'react-hooks/exhaustive-deps': 'warn',
+    // Make TypeScript ESLint less strict.
+    '@typescript-eslint/member-delimiter-style': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off',
+    '@typescript-eslint/restrict-plus-operands': 'off',
+    '@typescript-eslint/no-floating-promises': 'off',
+    '@typescript-eslint/triple-slash-reference': 'off',
+    'dot-notation': 'off'
   }
 }
